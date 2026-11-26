@@ -1,0 +1,17 @@
+<Application x:Class="ToolBoxPro.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:ToolBoxPro.Converters">
+    <Application.Resources>
+        <ResourceDictionary>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:IntToVisibilityConverter x:Key="IntToVisibilityConverter"/>
+            <converters:EnumToVisibilityConverter x:Key="EnumToVisibilityConverter"/>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
+            <converters:PaneWidthConverter x:Key="PaneWidthConverter"/>
+            <converters:BoolToStartStopConverter x:Key="BoolToStartStopConverter"/>
+            <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

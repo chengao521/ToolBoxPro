@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:ToolBoxPro.Maui"
+             xmlns:converters="clr-namespace:ToolBoxPro.Views.Converters"
+             x:Class="ToolBoxPro.Maui.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="PrimaryColor">#1976D2</Color>
+            <Color x:Key="SecondaryColor">#FF9800</Color>
+            <Color x:Key="BackgroundColor">#F5F5F5</Color>
+            <Color x:Key="SurfaceColor">#FFFFFF</Color>
+            <Color x:Key="TextColor">#212121</Color>
+            <Color x:Key="HintColor">#757575</Color>
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
+                <Setter Property="FontFamily" Value="OpenSansRegular"/>
+            </Style>
+
+            <Style TargetType="Button">
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}"/>
+                <Setter Property="FontFamily" Value="OpenSansRegular"/>
+                <Setter Property="CornerRadius" Value="8"/>
+                <Setter Property="Padding" Value="16,10"/>
+            </Style>
+
+            <Style TargetType="Entry">
+                <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource SurfaceColor}"/>
+                <Setter Property="FontFamily" Value="OpenSansRegular"/>
+                <Setter Property="PlaceholderColor" Value="{StaticResource HintColor}"/>
+                <Setter Property="HeightRequest" Value="44"/>
+            </Style>
+
+            <Style TargetType="Picker">
+                <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource SurfaceColor}"/>
+                <Setter Property="FontFamily" Value="OpenSansRegular"/>
+                <Setter Property="HeightRequest" Value="44"/>
+            </Style>
+
+            <converters:NonZeroConverter x:Key="NonZeroConverter"/>
+            <converters:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
+            <converters:CollectionNotEmptyConverter x:Key="CollectionNotEmptyConverter"/>
+            <converters:EnumEqualsConverter x:Key="EnumEqualsConverter"/>
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:ComingSoonTextConverter x:Key="ComingSoonTextConverter"/>
+            <converters:ComingSoonColorConverter x:Key="ComingSoonColorConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

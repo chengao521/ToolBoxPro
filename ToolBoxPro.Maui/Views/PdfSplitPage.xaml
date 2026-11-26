@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ToolBoxPro.ViewModels"
+             x:Class="ToolBoxPro.Views.PdfSplitPage"
+             Title="PDF拆分"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="14" Padding="16">
+
+            <!-- 源文件 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="源 PDF 文件" FontSize="13" TextColor="{StaticResource HintColor}"/>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Entry Grid.Column="0"
+                               Text="{Binding SourceFilePath}"
+                               IsReadOnly="True"
+                               Placeholder="未选择文件"/>
+                        <Button Grid.Column="1"
+                                Text="浏览"
+                                Command="{Binding SelectSourceFileCommand}"
+                                BackgroundColor="{StaticResource PrimaryColor}"
+                                Margin="8,0,0,0"/>
+                    </Grid>
+                    <Label Text="{Binding TotalPages, StringFormat='总页数: {0} 页'}"
+                           FontSize="13"
+                           TextColor="{StaticResource PrimaryColor}"
+                           IsVisible="{Binding TotalPages, Converter={StaticResource NonZeroConverter}}"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 输出目录 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="输出目录" FontSize="13" TextColor="{StaticResource HintColor}"/>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Entry Grid.Column="0"
+                               Text="{Binding OutputDirectory}"
+                               IsReadOnly="True"
+                               Placeholder="未选择目录"/>
+                        <Button Grid.Column="1"
+                                Text="浏览"
+                                Command="{Binding SelectOutputDirectoryCommand}"
+                                BackgroundColor="{StaticResource PrimaryColor}"
+                                Margin="8,0,0,0"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 拆分模式 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="拆分模式" FontSize="13" TextColor="{StaticResource HintColor}"/>
+                    <Picker ItemsSource="{Binding SplitModes}"
+                            SelectedItem="{Binding SelectedMode}"
+                            Title="选择拆分模式"/>
+
+                    <!-- 按范围 -->
+                    <VerticalStackLayout IsVisible="{Binding SelectedMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ByRange}" Spacing="6" Margin="0,4,0,0">
+                        <Label Text="页码范围（例如: 1-5, 8-10）" FontSize="12" TextColor="{StaticResource HintColor}"/>
+                        <Entry Text="{Binding PageRangesText}" Placeholder="1-5, 8-10"/>
+                    </VerticalStackLayout>
+
+                    <!-- 按间隔 -->
+                    <VerticalStackLayout IsVisible="{Binding SelectedMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ByInterval}" Spacing="6" Margin="0,4,0,0">
+                        <Label Text="每份页数" FontSize="12" TextColor="{StaticResource HintColor}"/>
+                        <Entry Text="{Binding PageInterval, StringFormat='{0}'}" Placeholder="每份页数" Keyboard="Numeric"/>
+                    </VerticalStackLayout>
+
+                    <!-- 提取页面 -->
+                    <VerticalStackLayout IsVisible="{Binding SelectedMode, Converter={StaticResource EnumEqualsConverter}, ConverterParameter=ExtractPages}" Spacing="8" Margin="0,4,0,0">
+                        <Grid ColumnDefinitions="*,Auto,*">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="起始页" FontSize="12" TextColor="{StaticResource HintColor}"/>
+                                <Entry Text="{Binding StartPage, StringFormat='{0}'}" Keyboard="Numeric" Placeholder="起始页"/>
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1" Text="至" VerticalOptions="End" Margin="8,0"/>
+                            <VerticalStackLayout Grid.Column="2" Spacing="4">
+                                <Label Text="结束页" FontSize="12" TextColor="{StaticResource HintColor}"/>
+                                <Entry Text="{Binding EndPage, StringFormat='{0}'}" Keyboard="Numeric" Placeholder="结束页"/>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 输出文件列表 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}" IsVisible="{Binding OutputFiles, Converter={StaticResource CollectionNotEmptyConverter}}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="输出文件" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextColor}"/>
+                    <ListView ItemsSource="{Binding OutputFiles}" SeparatorColor="#EEEEEE">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <TextCell Text="{Binding}" DetailColor="{StaticResource HintColor}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 状态条 -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource PrimaryColor}"/>
+            <Label Text="{Binding StatusMessage}" FontSize="13" TextColor="{StaticResource HintColor}" HorizontalOptions="Center"/>
+
+            <!-- 操作按钮 -->
+            <Grid ColumnDefinitions="*,*,*,*" Margin="0,8,0,0">
+                <Button Grid.Column="0"
+                        Text="打开文件夹"
+                        Command="{Binding OpenOutputFolderCommand}"
+                        BackgroundColor="#757575"
+                        IsVisible="{Binding OutputDirectory, Converter={StaticResource StringNotEmptyConverter}}"/>
+                <Button Grid.Column="1"
+                        Text="清空"
+                        Command="{Binding ClearCommand}"
+                        BackgroundColor="#757575"/>
+                <Button Grid.Column="3"
+                        Text="开始拆分"
+                        Command="{Binding SplitPdfCommand}"
+                        IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                        BackgroundColor="{StaticResource PrimaryColor}"/>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

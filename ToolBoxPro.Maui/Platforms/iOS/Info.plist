@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDisplayName</key>
+    <string>ToolBox Pro</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.toolboxpro.app</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UIDeviceFamily</key>
+    <array>
+        <integer>1</integer>
+        <integer>2</integer>
+    </array>
+    <key>UILaunchScreen</key>
+    <dict>
+        <key>UILaunchScreenTitle</key>
+        <string>ToolBox Pro</string>
+    </dict>
+    <key>UIViewControllerBasedStatusBarAppearance</key>
+    <false/>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>需要访问相册以保存图片</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>需要访问相册以处理图片</string>
+    <key>NSDocumentsFolderUsageDescription</key>
+    <string>需要访问文档文件夹以处理文件</string>
+</dict>
+</plist>

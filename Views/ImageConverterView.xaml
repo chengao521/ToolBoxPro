@@ -1,0 +1,198 @@
+<UserControl x:Class="ToolBoxPro.Views.ImageConverterView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题 -->
+        <TextBlock Grid.Row="0"
+                   Text="图片转换工具"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
+        <!-- 源文件选择 -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10">
+                <Button Content="添加图片"
+                        Command="{Binding SelectSourceFilesCommand}"
+                        Padding="15,5"
+                        Margin="0,0,10,0"/>
+                <TextBlock Text="{Binding SourceFiles.Count, StringFormat='已选择 {0} 个文件'}"
+                         VerticalAlignment="Center"
+                         Foreground="Gray"/>
+            </StackPanel>
+
+            <ListBox Grid.Row="1"
+                    ItemsSource="{Binding SourceFiles}"
+                    Height="100"
+                    Margin="0,0,0,10">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding}" Width="400" TextTrimming="CharacterEllipsis"/>
+                            <Button Content="×"
+                                   Command="{Binding DataContext.RemoveFileCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                   CommandParameter="{Binding}"
+                                   Width="25"
+                                   Height="25"
+                                   Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+
+        <!-- 输出目录和选项 -->
+        <Grid Grid.Row="2" Margin="0,0,0,15">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 输出目录 -->
+            <Grid Grid.Row="0" Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                         Text="输出目录:"
+                         VerticalAlignment="Center"
+                         Margin="0,0,10,0"/>
+
+                <TextBox Grid.Column="1"
+                        Text="{Binding OutputDirectory}"
+                        IsReadOnly="True"
+                        VerticalAlignment="Center"
+                        Padding="5"/>
+
+                <Button Grid.Column="2"
+                       Content="浏览..."
+                       Command="{Binding SelectOutputDirectoryCommand}"
+                       Margin="10,0,0,0"
+                       Padding="15,5"/>
+            </Grid>
+
+            <!-- 转换选项 -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                    <TextBlock Text="目标格式:" Margin="0,0,0,5"/>
+                    <ComboBox ItemsSource="{Binding ImageFormats}"
+                             SelectedItem="{Binding SelectedFormat}"
+                             Padding="5"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="10,0,0,0">
+                    <TextBlock Text="质量 (仅JPEG):" Margin="0,0,0,5"/>
+                    <Slider Minimum="1" Maximum="100"
+                           Value="{Binding Quality}"
+                           TickFrequency="1"
+                           IsSnapToTickEnabled="True"/>
+                    <TextBlock Text="{Binding Quality, StringFormat='{}{0}%'}">
+                               HorizontalAlignment="Center"
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <!-- 尺寸选项 -->
+        <GroupBox Grid.Row="3" Header="尺寸调整 (可选)" Margin="0,0,0,15">
+            <Grid Margin="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                    <TextBlock Text="最大宽度:" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding MaxWidth}" Padding="5"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Margin="10,0,10,0">
+                    <TextBlock Text="最大高度:" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding MaxHeight}" Padding="5"/>
+                </StackPanel>
+
+                <CheckBox Grid.Column="2"
+                         Content="保持宽高比"
+                         IsChecked="{Binding KeepAspectRatio}"
+                         VerticalAlignment="Bottom"
+                         Margin="10,0,0,5"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- 输出文件列表 -->
+        <GroupBox Grid.Row="4" Header="输出文件" Margin="0,0,0,15">
+            <ListBox ItemsSource="{Binding OutputFiles}"
+                    Margin="5"/>
+        </GroupBox>
+
+        <!-- 按钮和状态 -->
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                     Text="{Binding StatusMessage}"
+                     VerticalAlignment="Center"
+                     Foreground="Gray"/>
+
+            <ProgressBar Grid.Column="1"
+                        IsIndeterminate="{Binding IsBusy}"
+                        Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Height="20"
+                        Margin="10,0"/>
+
+            <Button Grid.Column="2"
+                   Content="打开输出文件夹"
+                   Command="{Binding OpenOutputFolderCommand}"
+                   Margin="5,0"
+                   Padding="15,5"/>
+
+            <Button Grid.Column="3"
+                   Content="清空"
+                   Command="{Binding ClearCommand}"
+                   Margin="5,0"
+                   Padding="15,5"/>
+
+            <Button Grid.Column="4"
+                   Content="开始转换"
+                   Command="{Binding ConvertImagesCommand}"
+                   IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                   Background="#0078D4"
+                   Foreground="White"
+                   Padding="20,8"
+                   FontWeight="Bold"/>
+        </Grid>
+    </Grid>
+</UserControl>

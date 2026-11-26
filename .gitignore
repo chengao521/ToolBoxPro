@@ -1,0 +1,41 @@
+# ===== .NET / Visual Studio =====
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.userprefs
+*.cache
+*.log
+
+# ===== Build / Publish output =====
+publish/
+Debug/
+Release/
+x64/
+x86/
+[Ll]og/
+[Ll]ogs/
+
+# ===== MAUI / WPF temp =====
+*_wpftmp.csproj
+*.g.cs
+*.g.i.cs
+
+# ===== IDE / OS =====
+.idea/
+.vscode/
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ===== Local debug leftovers (not source) =====
+maui_*.log
+maui_install.log
+maui_new.log
+maui_list.log
+inspect_assembly.cs
+toolbox-apple-design/
+.uploads/

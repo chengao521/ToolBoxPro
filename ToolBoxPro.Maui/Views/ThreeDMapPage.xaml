@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ToolBoxPro.Views.ThreeDMapPage"
+             Title="3D区划地图"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="14" Padding="16">
+
+            <!-- 标题 -->
+            <Label Text="3D 区划地图生成器" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" HorizontalOptions="Center"/>
+
+            <!-- 基础参数 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="基础参数" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextColor}"/>
+
+                    <Entry Text="{Binding Title}" Placeholder="地图标题"/>
+                    <Entry Text="{Binding GeoJsonUrl}" Placeholder="GeoJSON 数据地址（URL 或本地路径）"/>
+
+                    <Grid ColumnDefinitions="*,*">
+                        <Entry Grid.Column="0" Text="{Binding ProjectionCenterLongitude}" Placeholder="投影中心经度"/>
+                        <Entry Grid.Column="1" Text="{Binding ProjectionCenterLatitude}" Placeholder="投影中心纬度" Margin="8,0,0,0"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="{Binding ExtrudeDepth, StringFormat='拉伸深度: {0}'}" FontSize="13" VerticalOptions="Center"/>
+                        <Slider Grid.Column="1" Minimum="1" Maximum="50" Value="{Binding ExtrudeDepth}" WidthRequest="140" HorizontalOptions="End"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 颜色设置 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="颜色设置" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextColor}"/>
+
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <BoxView Grid.Column="0" WidthRequest="32" HeightRequest="32" CornerRadius="4" BackgroundColor="{Binding TopColor}" VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" Text="{Binding TopColor}" Placeholder="顶面颜色" Margin="8,0"/>
+                        <Button Grid.Column="2" Text="选择" BackgroundColor="#757575" WidthRequest="60"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <BoxView Grid.Column="0" WidthRequest="32" HeightRequest="32" CornerRadius="4" BackgroundColor="{Binding SideColor}" VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" Text="{Binding SideColor}" Placeholder="侧面颜色" Margin="8,0"/>
+                        <Button Grid.Column="2" Text="选择" BackgroundColor="#757575" WidthRequest="60"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <BoxView Grid.Column="0" WidthRequest="32" HeightRequest="32" CornerRadius="4" BackgroundColor="{Binding BorderColor}" VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" Text="{Binding BorderColor}" Placeholder="边框颜色" Margin="8,0"/>
+                        <Button Grid.Column="2" Text="选择" BackgroundColor="#757575" WidthRequest="60"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <BoxView Grid.Column="0" WidthRequest="32" HeightRequest="32" CornerRadius="4" BackgroundColor="{Binding HighlightColor}" VerticalOptions="Center"/>
+                        <Entry Grid.Column="1" Text="{Binding HighlightColor}" Placeholder="悬停颜色" Margin="8,0"/>
+                        <Button Grid.Column="2" Text="选择" BackgroundColor="#757575" WidthRequest="60"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 选项 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="显示选项" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextColor}"/>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="显示星空背景" FontSize="13" TextColor="{StaticResource TextColor}" VerticalOptions="Center"/>
+                        <Switch Grid.Column="1" IsToggled="{Binding ShowStars}" HorizontalOptions="End"/>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="显示地名标签" FontSize="13" TextColor="{StaticResource TextColor}" VerticalOptions="Center"/>
+                        <Switch Grid.Column="1" IsToggled="{Binding ShowLabels}" HorizontalOptions="End"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 输出路径 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Grid.Column="0" Spacing="6">
+                        <Label Text="输出文件" FontSize="13" TextColor="{StaticResource HintColor}"/>
+                        <Entry Text="{Binding OutputPath}" IsReadOnly="True" Placeholder="未选择保存位置"/>
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1" Text="浏览" Command="{Binding SelectOutputPathCommand}" BackgroundColor="{StaticResource PrimaryColor}" Margin="8,0,0,0"/>
+                </Grid>
+            </Frame>
+
+            <!-- 预设按钮 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <Grid ColumnDefinitions="*,*,*">
+                    <Button Grid.Column="0" Text="中国" Command="{Binding UseChinaPresetCommand}" BackgroundColor="{StaticResource PrimaryColor}"/>
+                    <Button Grid.Column="1" Text="浙江" Command="{Binding UseZhejiangPresetCommand}" BackgroundColor="{StaticResource PrimaryColor}"/>
+                    <Button Grid.Column="2" Text="重置样式" Command="{Binding ResetStyleCommand}" BackgroundColor="#757575"/>
+                </Grid>
+            </Frame>
+
+            <!-- 状态和操作 -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource PrimaryColor}"/>
+            <Label Text="{Binding StatusMessage}" FontSize="13" TextColor="{StaticResource HintColor}" HorizontalOptions="Center"/>
+
+            <Grid ColumnDefinitions="*,*,*" Margin="0,8,0,0">
+                <Button Grid.Column="0" Text="打开文件夹" Command="{Binding OpenOutputFolderCommand}" BackgroundColor="#757575" IsVisible="{Binding OutputPath, Converter={StaticResource StringNotEmptyConverter}}"/>
+                <Button Grid.Column="1" Text="生成并打开" Command="{Binding GenerateAndOpenCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" BackgroundColor="{StaticResource SecondaryColor}"/>
+                <Button Grid.Column="2" Text="生成" Command="{Binding GenerateMapCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" BackgroundColor="{StaticResource PrimaryColor}"/>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

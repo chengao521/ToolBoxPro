@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ToolBoxPro.ViewModels"
+             x:Class="ToolBoxPro.Views.ImageConverterPage"
+             Title="图片转换"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="14" Padding="16">
+
+            <!-- 源文件列表 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <VerticalStackLayout Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="图片文件" FontSize="13" TextColor="{StaticResource HintColor}" VerticalOptions="Center"/>
+                        <Button Grid.Column="1" Text="添加" Command="{Binding SelectSourceFilesCommand}" BackgroundColor="{StaticResource PrimaryColor}" Margin="8,0,0,0"/>
+                    </Grid>
+                    <CollectionView ItemsSource="{Binding SourceFiles}" IsVisible="{Binding SourceFiles, Converter={StaticResource CollectionNotEmptyConverter}}">
+                        <CollectionView.ItemsLayout><LinearItemsLayout Orientation="Vertical" ItemSpacing="4"/></CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0" Text="{Binding}" FontSize="12" TextColor="{StaticResource TextColor}" VerticalOptions="Center" LineBreakMode="TailTruncation"/>
+                                    <ImageButton Grid.Column="1" Command="{Binding RemoveFileCommand}" CommandParameter="{Binding}" Source="icon_remove.png" WidthRequest="24" HeightRequest="24" Margin="0,0,4,0"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Label Text="{Binding StatusMessage}" FontSize="12" TextColor="{StaticResource HintColor}" IsVisible="{Binding SourceFiles, Converter={StaticResource CollectionNotEmptyConverter}}"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 输出目录 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Grid.Column="0" Spacing="6">
+                        <Label Text="输出目录" FontSize="13" TextColor="{StaticResource HintColor}"/>
+                        <Entry Text="{Binding OutputDirectory}" IsReadOnly="True" Placeholder="未选择目录"/>
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1" Text="浏览" Command="{Binding SelectOutputDirectoryCommand}" BackgroundColor="{StaticResource PrimaryColor}" Margin="8,0,0,0"/>
+                </Grid>
+            </Frame>
+
+            <!-- 转换选项 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="转换选项" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextColor}"/>
+
+                    <Picker ItemsSource="{Binding ImageFormats}" SelectedItem="{Binding SelectedFormat}" Title="目标格式"/>
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0" Text="{Binding Quality, StringFormat='{0}%'}" FontSize="13" TextColor="{StaticResource TextColor}" VerticalOptions="Center"/>
+                        <Slider Grid.Column="1" Minimum="10" Maximum="100" Value="{Binding Quality}" WidthRequest="140" HorizontalOptions="End"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*,Auto">
+                        <Entry Grid.Column="0" Text="{Binding MaxWidth, StringFormat='{}{0}'}" Keyboard="Numeric" Placeholder="最大宽度"/>
+                        <Entry Grid.Column="1" Text="{Binding MaxHeight, StringFormat='{}{0}'}" Keyboard="Numeric" Placeholder="最大高度" Margin="8,0,0,0"/>
+                        <CheckBox Grid.Column="2" IsChecked="{Binding KeepAspectRatio}" VerticalOptions="Center" Margin="8,0,0,0"/>
+                    </Grid>
+                    <Label Text="保持宽高比" FontSize="11" TextColor="{StaticResource HintColor}"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 输出文件列表 -->
+            <Frame BorderColor="#DDDDDD" CornerRadius="10" Padding="14" BackgroundColor="{StaticResource SurfaceColor}" IsVisible="{Binding OutputFiles, Converter={StaticResource CollectionNotEmptyConverter}}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="输出文件" FontSize="13" FontAttributes="Bold" TextColor="{StaticResource TextColor}"/>
+                    <ListView ItemsSource="{Binding OutputFiles}" SeparatorColor="#EEEEEE">
+                        <ListView.ItemTemplate><DataTemplate><TextCell Text="{Binding}" DetailColor="{StaticResource HintColor}"/></DataTemplate></ListView.ItemTemplate>
+                    </ListView>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- 状态和操作 -->
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="{StaticResource PrimaryColor}"/>
+            <Label Text="{Binding StatusMessage}" FontSize="13" TextColor="{StaticResource HintColor}" HorizontalOptions="Center"/>
+
+            <Grid ColumnDefinitions="*,*,*,*" Margin="0,8,0,0">
+                <Button Grid.Column="0" Text="打开文件夹" Command="{Binding OpenOutputFolderCommand}" BackgroundColor="#757575" IsVisible="{Binding OutputDirectory, Converter={StaticResource StringNotEmptyConverter}}"/>
+                <Button Grid.Column="1" Text="清空" Command="{Binding ClearCommand}" BackgroundColor="#757575"/>
+                <Button Grid.Column="3" Text="开始转换" Command="{Binding ConvertImagesCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}" BackgroundColor="{StaticResource PrimaryColor}"/>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

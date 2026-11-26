@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="ToolBoxPro.Maui.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:ToolBoxPro.Maui"
+    xmlns:views="clr-namespace:ToolBoxPro.Views;assembly=ToolBoxPro.Maui"
+    Shell.Title="ToolBox Pro"
+    Shell.ForegroundColor="White"
+    Shell.BackgroundColor="#1976D2">
+
+    <FlyoutItem Title="主页" Icon="icon_home.png">
+        <ShellContent ContentTemplate="{DataTemplate views:HomePage}" Route="HomePage"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="PDF拆分" Icon="icon_pdf.png">
+        <ShellContent ContentTemplate="{DataTemplate views:PdfSplitPage}" Route="PdfSplitPage"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="图片转换" Icon="icon_image.png">
+        <ShellContent ContentTemplate="{DataTemplate views:ImageConverterPage}" Route="ImageConverterPage"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="批量重命名" Icon="icon_file.png">
+        <ShellContent ContentTemplate="{DataTemplate views:FileRenamePage}" Route="FileRenamePage"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="3D地图" Icon="icon_map.png">
+        <ShellContent ContentTemplate="{DataTemplate views:ThreeDMapPage}" Route="ThreeDMapPage"/>
+    </FlyoutItem>
+
+</Shell>

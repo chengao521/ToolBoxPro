@@ -1,0 +1,186 @@
+<UserControl x:Class="ToolBoxPro.Views.FileRenameView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="800">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题 -->
+        <TextBlock Grid.Row="0"
+                   Text="批量文件重命名"
+                   FontSize="24"
+                   FontWeight="Bold"
+                   Margin="0,0,0,20"/>
+
+        <!-- 目录选择 -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                     Text="文件夹:"
+                     VerticalAlignment="Center"
+                     Margin="0,0,10,0"/>
+
+            <TextBox Grid.Column="1"
+                    Text="{Binding SourceDirectory}"
+                    IsReadOnly="True"
+                    VerticalAlignment="Center"
+                    Padding="5"/>
+
+            <Button Grid.Column="2"
+                   Content="浏览..."
+                   Command="{Binding SelectDirectoryCommand}"
+                   Margin="10,0,0,0"
+                   Padding="15,5"/>
+        </Grid>
+
+        <!-- 重命名模式 -->
+        <GroupBox Grid.Row="2" Header="重命名模式" Margin="0,0,0,15">
+            <StackPanel Margin="10">
+                <ComboBox ItemsSource="{Binding RenameModes}"
+                         SelectedItem="{Binding SelectedMode}"
+                         Margin="0,0,0,10"/>
+
+                <!-- 序号模式选项 -->
+                <StackPanel Visibility="{Binding SelectedMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=Sequential}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                            <TextBlock Text="命名模式:" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding NewNamePattern}" Padding="5"/>
+                            <TextBlock Text="可用变量: {name}, {index}, {ext}" 
+                                     FontSize="10" Foreground="Gray" Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="起始序号:" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding StartIndex}" Padding="5"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <!-- 查找替换选项 -->
+                <StackPanel Visibility="{Binding SelectedMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=FindReplace}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                            <TextBlock Text="查找:" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding FindText}" Padding="5"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Text="替换为:" Margin="0,0,0,5"/>
+                            <TextBox Text="{Binding ReplaceText}" Padding="5"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+                <!-- 添加前缀/后缀 -->
+                <StackPanel Visibility="{Binding SelectedMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=AddPrefix}">
+                    <StackPanel>
+                        <TextBlock Text="前缀文本:" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding FindText}" Padding="5"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Visibility="{Binding SelectedMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=AddSuffix}">
+                    <StackPanel>
+                        <TextBlock Text="后缀文本:" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding FindText}" Padding="5"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- 更改扩展名 -->
+                <StackPanel Visibility="{Binding SelectedMode, Converter={StaticResource EnumToVisibilityConverter}, ConverterParameter=ChangeExtension}">
+                    <StackPanel>
+                        <TextBlock Text="新扩展名 (包含点，如 .txt):" Margin="0,0,0,5"/>
+                        <TextBox Text="{Binding ReplaceText}" Padding="5"/>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- 选项 -->
+        <Grid Grid.Row="3" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Text="文件匹配模式:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBox Text="{Binding SearchPattern}" Width="150" Padding="5" Margin="0,0,20,0"/>
+                <CheckBox Content="包含子文件夹" IsChecked="{Binding IncludeSubdirectories}" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- 预览信息 -->
+        <GroupBox Grid.Row="4" Header="预览" Margin="0,0,0,15">
+            <StackPanel Margin="10">
+                <TextBlock Text="{Binding FileCount, StringFormat='匹配文件数: {0}'}" FontSize="16" Margin="0,0,0,10"/>
+                <Button Content="预览文件数量"
+                       Command="{Binding PreviewFilesCommand}"
+                       HorizontalAlignment="Left"
+                       Padding="15,5"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- 按钮和状态 -->
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0"
+                     Text="{Binding StatusMessage}"
+                     VerticalAlignment="Center"
+                     Foreground="Gray"/>
+
+            <ProgressBar Grid.Column="1"
+                        IsIndeterminate="{Binding IsBusy}"
+                        Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Height="20"
+                        Margin="10,0"/>
+
+            <Button Grid.Column="2"
+                   Content="清空"
+                   Command="{Binding ClearCommand}"
+                   Margin="5,0"
+                   Padding="15,5"/>
+
+            <Button Grid.Column="3"
+                   Content="开始重命名"
+                   Command="{Binding ExecuteRenameCommand}"
+                   IsEnabled="{Binding IsBusy, Converter={StaticResource InverseBooleanConverter}}"
+                   Background="#0078D4"
+                   Foreground="White"
+                   Padding="20,8"
+                   FontWeight="Bold"/>
+        </Grid>
+    </Grid>
+</UserControl>

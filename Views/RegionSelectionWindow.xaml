@@ -1,0 +1,35 @@
+<Window x:Class="ToolBoxPro.Views.RegionSelectionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="选择截取区域"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Topmost="True"
+        Cursor="Cross">
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="Black" Opacity="0.3"/>
+        </Grid.Background>
+        
+        <Canvas x:Name="SelectionCanvas"
+                Background="Transparent"
+                MouseDown="Canvas_MouseDown"
+                MouseMove="Canvas_MouseMove"
+                MouseUp="Canvas_MouseUp"
+                MouseRightButtonDown="Canvas_MouseRightButtonDown">
+            <Rectangle x:Name="SelectionRect"
+                       Stroke="Red"
+                       StrokeThickness="2"
+                       Fill="#20FF0000"
+                       Visibility="Hidden"/>
+            
+            <TextBlock x:Name="SizeLabel"
+                       Foreground="White"
+                       FontSize="14"
+                       Visibility="Hidden"
+                       Canvas.Left="10"
+                       Canvas.Top="10"/>
+        </Canvas>
+    </Grid>
+</Window>
